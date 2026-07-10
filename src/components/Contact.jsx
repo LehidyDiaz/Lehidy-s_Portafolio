@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { useApp } from '../context/AppContext'
+import SectionAtmosphere from './SectionAtmosphere'
 
 const contactChannels = [
   {
@@ -50,6 +51,7 @@ export default function Contact() {
 
   return (
     <section id="contact" className="py-20 px-4 bg-surface-light dark:bg-[#07101f] transition-colors relative overflow-hidden section-stars">
+      <SectionAtmosphere variant="contact" />
       <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-600 via-gold to-blue-600" />
       <div className="absolute inset-0 pointer-events-none">
         <div className="hidden md:block absolute bottom-10 right-1/4 w-60 h-60 bg-blue-500/5 rounded-full blur-3xl" />

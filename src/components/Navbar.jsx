@@ -28,7 +28,7 @@ export default function Navbar() {
           <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
             <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" strokeLinecap="round" strokeLinejoin="round"/>
           </svg>
-          <span>Lehidy</span>
+          <span className="brand-name">Lehidy</span>
           <span className="hidden sm:inline text-[10px] font-normal tracking-[0.3em] text-gold/40 ml-1">PORTFOLIO</span>
         </a>
 

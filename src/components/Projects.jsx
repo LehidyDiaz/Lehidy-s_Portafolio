@@ -1,6 +1,7 @@
-import { useState, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useApp } from '../context/AppContext'
 import ProjectGalleryModal from './ProjectGalleryModal'
+import SectionAtmosphere from './SectionAtmosphere'
 
 const categories = [
   { key: 'all', icon: '⊞' },
@@ -68,18 +69,57 @@ export default function Projects() {
   const [currentIndex, setCurrentIndex] = useState(0)
   const [galleryOpen, setGalleryOpen] = useState(false)
   const [galleryProject, setGalleryProject] = useState(null)
+  const [slidesPerView, setSlidesPerView] = useState(3)
+  const [viewportWidth, setViewportWidth] = useState(0)
   const { t, lang } = useApp()
   const carouselRef = useRef(null)
+  const touchStartRef = useRef(null)
+
+  useEffect(() => {
+    const updateSlidesPerView = () => {
+      const width = window.innerWidth
+      setViewportWidth(width)
+      setSlidesPerView(width < 768 ? 1 : width < 1024 ? 2 : 3)
+    }
+
+    updateSlidesPerView()
+    window.addEventListener('resize', updateSlidesPerView, { passive: true })
+    return () => window.removeEventListener('resize', updateSlidesPerView)
+  }, [])
 
   const filtered = activeCategory === 'all'
     ? projects
     : projects.filter((p) => p.category === activeCategory)
 
-  const visibleCount = Math.min(filtered.length, 3)
+  const isMobile = slidesPerView === 1
+  const visibleCount = Math.min(filtered.length, slidesPerView)
 
-  const displayItems = [...filtered, ...filtered.slice(0, visibleCount)]
+  const displayItems = isMobile ? filtered : [...filtered, ...filtered.slice(0, visibleCount)]
   const maxIndex = filtered.length - 1
-  const highlightIndex = visibleCount <= 2 ? currentIndex : currentIndex + 1
+  const highlightIndex = visibleCount >= 3 ? currentIndex + 1 : currentIndex
+
+  const handleTouchStart = (event) => {
+    if (!isMobile) return
+    const touch = event.touches[0]
+    touchStartRef.current = { x: touch.clientX, y: touch.clientY }
+  }
+
+  const handleTouchEnd = (event) => {
+    if (!isMobile || !touchStartRef.current) return
+    const touch = event.changedTouches[0]
+    const deltaX = touch.clientX - touchStartRef.current.x
+    const deltaY = touch.clientY - touchStartRef.current.y
+    touchStartRef.current = null
+
+    if (Math.abs(deltaX) < 42 || Math.abs(deltaX) <= Math.abs(deltaY)) return
+    if (deltaX < 0) nextSlide()
+    else prevSlide()
+  }
+
+  const selectCategory = (key) => {
+    setActiveCategory(key)
+    setCurrentIndex(0)
+  }
 
   const prevSlide = () => {
     setCurrentIndex((prev) => (prev === 0 ? maxIndex : prev - 1))
@@ -109,6 +149,7 @@ export default function Projects() {
 
   return (
     <section id="projects" className="py-20 px-4 bg-gray-50 dark:bg-[#060A18] transition-colors relative overflow-hidden section-stars">
+      <SectionAtmosphere variant="projects" />
       <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-600 via-gold to-blue-600" />
       <div className="absolute inset-0 pointer-events-none">
         <div className="hidden md:block absolute top-20 left-10 w-56 h-56 bg-blue-500/5 rounded-full blur-3xl" />
@@ -128,11 +169,11 @@ export default function Projects() {
           {t('projectsSub')}
         </p>
 
-        <div className="flex flex-wrap justify-center gap-2.5 mb-10">
+        <div className="project-filters flex flex-wrap justify-center gap-2.5 mb-10">
           {categories.map((cat) => (
             <button
               key={cat.key}
-              onClick={() => { setActiveCategory(cat.key); setCurrentIndex(0) }}
+              onClick={() => selectCategory(cat.key)}
               className={`project-filter flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 border ${
                 activeCategory === cat.key
                   ? 'project-filter-active bg-gold/10 text-gold border-gold/80 shadow-md shadow-gold/20'
@@ -151,16 +192,24 @@ export default function Projects() {
           </p>
         ) : (
           <div className="relative project-carousel-shell">
-            <div ref={carouselRef} className="overflow-hidden px-1 py-8 md:px-8">
+            <div
+              ref={carouselRef}
+              onTouchStart={handleTouchStart}
+              onTouchEnd={handleTouchEnd}
+              className={`project-carousel-viewport px-1 py-8 md:px-8 ${isMobile ? 'is-mobile' : ''}`}
+            >
               <div
-                className="flex items-center transition-transform duration-500 ease-out gap-4"
-                style={{ transform: `translateX(-${currentIndex * (100 / visibleCount)}%)` }}
+                className="project-carousel-track flex items-center transition-transform duration-500 ease-out gap-4"
+                style={isMobile
+                  ? { '--project-mobile-offset': `${-currentIndex * (Math.min(viewportWidth * .9, 360) + 12)}px` }
+                  : { transform: `translateX(-${currentIndex * (100 / visibleCount)}%)` }}
               >
                 {displayItems.map((project, i) => (
                   <div
                     key={`${project.id}-${i}`}
+                    data-slide-index={i}
                     className={`project-slide min-w-0 flex-shrink-0 ${i === highlightIndex ? 'project-slide-active' : ''}`}
-                    style={{ flex: `0 0 calc(${100 / visibleCount}% - ${(visibleCount - 1) * 16 / visibleCount}px)` }}
+                    style={isMobile ? undefined : { flex: `0 0 calc(${100 / visibleCount}% - ${(visibleCount - 1) * 16 / visibleCount}px)` }}
                   >
                     <div
                       className={`project-card group relative bg-white/95 dark:bg-[#07101f]/95 rounded-2xl overflow-hidden border transition-all duration-500 hover:shadow-xl ${
@@ -233,7 +282,7 @@ export default function Projects() {
               <>
                 <button
                   onClick={prevSlide}
-                  className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-3 md:-translate-x-5 w-10 h-10 flex items-center justify-center rounded-full bg-white dark:bg-blue-night border border-blue-200 dark:border-blue-navy text-blue-600 dark:text-gold hover:bg-blue-50 dark:hover:bg-blue-navy/70 transition-all shadow-md hover:shadow-lg z-10"
+                  className="project-arrow project-arrow-prev absolute left-0 top-1/2 -translate-y-1/2 -translate-x-3 md:-translate-x-5 w-10 h-10 flex items-center justify-center rounded-full bg-white dark:bg-blue-night border border-blue-200 dark:border-blue-navy text-blue-600 dark:text-gold hover:bg-blue-50 dark:hover:bg-blue-navy/70 transition-all shadow-md hover:shadow-lg z-10"
                   aria-label="Previous"
                 >
                   <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -242,7 +291,7 @@ export default function Projects() {
                 </button>
                 <button
                   onClick={nextSlide}
-                  className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-3 md:translate-x-5 w-10 h-10 flex items-center justify-center rounded-full bg-white dark:bg-blue-night border border-blue-200 dark:border-blue-navy text-blue-600 dark:text-gold hover:bg-blue-50 dark:hover:bg-blue-navy/70 transition-all shadow-md hover:shadow-lg z-10"
+                  className="project-arrow project-arrow-next absolute right-0 top-1/2 -translate-y-1/2 translate-x-3 md:translate-x-5 w-10 h-10 flex items-center justify-center rounded-full bg-white dark:bg-blue-night border border-blue-200 dark:border-blue-navy text-blue-600 dark:text-gold hover:bg-blue-50 dark:hover:bg-blue-navy/70 transition-all shadow-md hover:shadow-lg z-10"
                   aria-label="Next"
                 >
                   <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">

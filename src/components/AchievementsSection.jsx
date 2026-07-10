@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { useApp } from '../context/AppContext'
+import SectionAtmosphere from './SectionAtmosphere'
 
 const microsoftProfileUrl = 'https://learn.microsoft.com/en-us/users/lehidy/'
 
@@ -225,6 +226,7 @@ export default function AchievementsSection() {
 
   return (
     <section id="achievements" className="achievements-section section-stars">
+      <SectionAtmosphere variant="achievements" />
       <div className="achievement-constellation achievement-constellation-left" aria-hidden="true"><span /><span /><span /><span /></div>
       <div className="achievement-constellation achievement-constellation-right" aria-hidden="true"><span /><span /><span /><span /></div>
 

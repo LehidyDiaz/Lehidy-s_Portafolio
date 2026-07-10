@@ -1,6 +1,9 @@
+import SectionAtmosphere from './SectionAtmosphere'
+
 export default function Footer() {
   return (
     <footer className="py-8 px-4 bg-blue-deep text-gold/60 text-center border-t border-gold/10 section-stars">
+      <SectionAtmosphere variant="footer" />
       <div className="flex items-center justify-center gap-4 mb-3 text-gold/20">
         <div className="h-px flex-1 max-w-[120px] bg-gold/20" />
         <span className="text-sm tracking-[0.3em]">✦ ✦ ✦</span>

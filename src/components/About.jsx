@@ -1,4 +1,5 @@
 import { useApp } from '../context/AppContext'
+import SectionAtmosphere from './SectionAtmosphere'
 
 const quickData = [
   { labelEs: 'Análisis de datos', labelEn: 'Data Analysis', icon: '📊' },
@@ -14,6 +15,7 @@ export default function About() {
 
   return (
     <section id="about" className="py-20 px-4 bg-white dark:bg-blue-night transition-colors relative overflow-hidden section-stars">
+      <SectionAtmosphere variant="about" />
       <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-green-emerald via-gold to-green-emerald" />
       <div className="absolute inset-0 pointer-events-none">
         <div className="hidden md:block absolute top-10 right-10 w-48 h-48 bg-green-emerald/5 rounded-full blur-3xl" />

@@ -1,4 +1,5 @@
 import { useApp } from '../context/AppContext'
+import SectionAtmosphere from './SectionAtmosphere'
 
 const skills = [
   { name: 'React', level: 90, color: 'from-blue-500 to-blue-700', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/react/react-original.svg' },
@@ -16,6 +17,7 @@ export default function Skills() {
 
   return (
     <section id="skills" className="py-20 px-4 bg-white dark:bg-[#07101f] transition-colors relative overflow-hidden section-stars">
+      <SectionAtmosphere variant="skills" />
       <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-600 via-gold to-blue-600" />
       <div className="absolute inset-0 pointer-events-none">
         <div className="hidden md:block absolute top-10 left-1/3 w-52 h-52 bg-blue-500/5 rounded-full blur-3xl" />

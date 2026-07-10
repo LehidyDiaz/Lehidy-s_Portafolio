@@ -1,10 +1,12 @@
 import { useApp } from '../context/AppContext'
+import SectionAtmosphere from './SectionAtmosphere'
 
 export default function Hero() {
   const { t } = useApp()
 
   return (
     <section id="hero" className="min-h-screen flex items-center justify-center px-4 bg-gradient-to-b from-surface-light via-surface-light to-gold/10 dark:from-blue-deep dark:via-blue-night dark:to-blue-deep pt-16 relative overflow-hidden section-stars">
+      <SectionAtmosphere variant="hero" />
       <div className="absolute inset-0 pointer-events-none">
         <div className="absolute top-10 left-1/4 w-64 h-64 bg-gold/5 rounded-full blur-3xl" />
         <div className="absolute bottom-20 right-1/4 w-80 h-80 bg-blue-500/5 rounded-full blur-3xl" />
@@ -22,7 +24,7 @@ export default function Hero() {
           </div>
           <h1 className="text-4xl md:text-6xl font-bold text-gray-900 dark:text-white mb-4 font-cinzel leading-tight">
             {t('heroTitulo')}{' '}
-            <span className="text-gold">{t('heroNombre')}</span>
+            <span className="brand-name text-gold">{t('heroNombre')}</span>
           </h1>
           <div className="flex items-center justify-center gap-4 mb-3 text-gold/30">
             <div className="h-px flex-1 max-w-[220px] bg-gold/30" />

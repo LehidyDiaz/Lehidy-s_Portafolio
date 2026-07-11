@@ -89,6 +89,118 @@ const achievements = [
     badge: 'chart',
     tone: 'green',
   },
+  {
+    id: 6,
+    title: 'Introducción a la infraestructura en la nube: Descripción de los conceptos de la nube',
+    date: null,
+    year: null,
+    category: 'Azure',
+    type: 'Módulo completado',
+    platform: 'Microsoft Learn',
+    url: 'https://learn.microsoft.com/api/achievements/share/es-es/DiazMunaycoLehidyPamela-7971/K932E5JB?sharingId=48B90D91B7E1A7',
+    featured: false,
+    visible: true,
+    image: 'https://learn.microsoft.com/training/achievements/microsoft-azure-fundamentals-describe-cloud-concepts-social.png',
+    imageAlt: 'Introducción a la infraestructura en la nube: Descripción de los conceptos de la nube',
+    badge: 'azure',
+    tone: 'blue',
+  },
+  {
+    id: 7,
+    title: 'Introducción a la inteligencia artificial y los agentes generativos',
+    date: null,
+    year: null,
+    category: 'Inteligencia Artificial',
+    type: 'Módulo completado',
+    platform: 'Microsoft Learn',
+    url: 'https://learn.microsoft.com/api/achievements/share/es-es/DiazMunaycoLehidyPamela-7971/BUHVPY6D?sharingId=48B90D91B7E1A7',
+    featured: false,
+    visible: true,
+    image: 'https://learn.microsoft.com/training/achievements/fundamentals-generative-ai-social.png',
+    imageAlt: 'Introducción a la inteligencia artificial y los agentes generativos',
+    badge: 'ai',
+    tone: 'green',
+  },
+  {
+    id: 8,
+    title: 'Descripción de las herramientas de supervisión de Azure',
+    date: null,
+    year: null,
+    category: 'Azure',
+    type: 'Módulo completado',
+    platform: 'Microsoft Learn',
+    url: 'https://learn.microsoft.com/api/achievements/share/es-es/DiazMunaycoLehidyPamela-7971/7DTWYUWZ?sharingId=48B90D91B7E1A7',
+    featured: false,
+    visible: true,
+    image: 'https://learn.microsoft.com/training/achievements/describe-monitoring-tools-azure-social.png',
+    imageAlt: 'Descripción de las herramientas de supervisión de Azure',
+    badge: 'azure',
+    tone: 'blue',
+  },
+  {
+    id: 9,
+    title: 'Descripción de las características y herramientas de Azure para la gobernanza y el cumplimiento',
+    date: null,
+    year: null,
+    category: 'Azure',
+    type: 'Módulo completado',
+    platform: 'Microsoft Learn',
+    url: 'https://learn.microsoft.com/api/achievements/share/es-es/DiazMunaycoLehidyPamela-7971/WME63LDN?sharingId=48B90D91B7E1A7',
+    featured: false,
+    visible: true,
+    image: 'https://learn.microsoft.com/training/achievements/describe-features-tools-azure-for-governance-compliance-social.png',
+    imageAlt: 'Descripción de las características y herramientas de Azure para la gobernanza y el cumplimiento',
+    badge: 'azure',
+    tone: 'blue',
+  },
+  {
+    id: 10,
+    title: 'Descripción de las características y herramientas para administrar e implementar recursos de Azure',
+    date: null,
+    year: null,
+    category: 'Azure',
+    type: 'Módulo completado',
+    platform: 'Microsoft Learn',
+    url: 'https://learn.microsoft.com/api/achievements/share/es-es/DiazMunaycoLehidyPamela-7971/FE498CWX?sharingId=48B90D91B7E1A7',
+    featured: false,
+    visible: true,
+    image: 'https://learn.microsoft.com/training/achievements/describe-features-tools-manage-deploy-azure-resources-social.png',
+    imageAlt: 'Descripción de las características y herramientas para administrar e implementar recursos de Azure',
+    badge: 'azure',
+    tone: 'blue',
+  },
+  {
+    id: 11,
+    title: 'Describir los componentes arquitectónicos principales de Azure',
+    date: null,
+    year: null,
+    category: 'Azure',
+    type: 'Módulo completado',
+    platform: 'Microsoft Learn',
+    url: 'https://learn.microsoft.com/api/achievements/share/es-es/DiazMunaycoLehidyPamela-7971/FE43EPQX?sharingId=48B90D91B7E1A7',
+    featured: false,
+    visible: true,
+    image: 'https://learn.microsoft.com/training/achievements/describe-core-architectural-components-of-azure-social.png',
+    imageAlt: 'Describir los componentes arquitectónicos principales de Azure',
+    badge: 'azure',
+    tone: 'blue',
+  },
+  {
+    id: 12,
+    title: 'Descripción de la administración de costos en Azure',
+    date: null,
+    year: null,
+    category: 'Azure',
+    type: 'Módulo completado',
+    platform: 'Microsoft Learn',
+    url: 'https://learn.microsoft.com/api/achievements/share/es-es/DiazMunaycoLehidyPamela-7971/9AZ5A6NU?sharingId=48B90D91B7E1A7',
+    featured: false,
+    visible: true,
+    image: 'https://learn.microsoft.com/training/achievements/describe-cost-management-azure-social.png',
+    imageAlt: 'Descripción de la administración de costos en Azure',
+    badge: 'azure',
+    tone: 'blue',
+  },
 ]
 
 const categoryOptions = [
@@ -102,7 +214,7 @@ const categoryOptions = [
   { key: 'Otros', label: 'Otros', icon: 'grid' },
 ]
 
-const INITIAL_SECONDARY_COUNT = 2
+const INITIAL_SECONDARY_COUNT = 4
 
 function LineIcon({ type, className = 'h-5 w-5' }) {
   const paths = {
@@ -175,14 +287,14 @@ function AchievementStats({ items }) {
   )
 }
 
-function FeaturedAchievement({ achievement, lang }) {
+function FeaturedAchievement({ achievement, lang, label = 'LOGRO DESTACADO' }) {
   if (!achievement) return null
 
   return (
     <article className="featured-achievement">
       <span className="featured-corner featured-corner-top">✦</span>
       <span className="featured-corner featured-corner-bottom">✦</span>
-      <div className="featured-label"><LineIcon type="star" className="h-4 w-4" /> LOGRO DESTACADO</div>
+      <div className="featured-label"><LineIcon type="star" className="h-4 w-4" /> {label}</div>
       <div className="featured-content">
         <AchievementImage achievement={achievement} large />
         <div className="featured-copy">
@@ -204,9 +316,9 @@ function FeaturedAchievement({ achievement, lang }) {
   )
 }
 
-function AchievementCard({ achievement }) {
+function AchievementCard({ achievement, hidden = false }) {
   return (
-    <article className={`achievement-card achievement-card-${achievement.tone}`}>
+    <article className={`achievement-card achievement-card-${achievement.tone}`} aria-hidden={hidden} inert={hidden}>
       <span className="achievement-verified" title="Credencial verificable"><LineIcon type="verified" /></span>
       <AchievementImage achievement={achievement} />
       <span className="achievement-type">{achievement.type}</span>
@@ -215,6 +327,25 @@ function AchievementCard({ achievement }) {
       {achievement.date && <time dateTime={String(achievement.year)}><LineIcon type="calendar" />{achievement.date}</time>}
       <a href={achievement.url} target="_blank" rel="noopener noreferrer">Ver logro <span aria-hidden="true">↗</span></a>
     </article>
+  )
+}
+
+function AchievementShowcaseRow({ group, groupIndex, lang }) {
+  const reverse = groupIndex % 2 !== 0
+  const largeAchievement = reverse ? group.at(-1) : group[0]
+  const smallAchievements = reverse ? group.slice(0, -1) : group.slice(1)
+
+  return (
+    <div className={`achievement-showcase-row ${reverse ? 'is-reversed' : ''}`}>
+      <FeaturedAchievement
+        achievement={largeAchievement}
+        lang={lang}
+        label={largeAchievement.featured ? 'LOGRO DESTACADO' : 'LOGRO'}
+      />
+      <div className="achievement-bento">
+        {smallAchievements.map((achievement) => <AchievementCard achievement={achievement} key={achievement.id} />)}
+      </div>
+    </div>
   )
 }
 
@@ -231,10 +362,11 @@ export default function AchievementsSection() {
     const matchesYear = year === 'Todos' || achievement.year === Number(year)
     return matchesCategory && matchesYear
   })
-  const featured = filteredAchievements.find((achievement) => achievement.featured)
-  const secondary = filteredAchievements.filter((achievement) => !achievement.featured)
-  const shownSecondary = expanded ? secondary : secondary.slice(0, INITIAL_SECONDARY_COUNT)
-  const canToggle = secondary.length > INITIAL_SECONDARY_COUNT
+  const achievementGroups = Array.from(
+    { length: Math.ceil(filteredAchievements.length / (INITIAL_SECONDARY_COUNT + 1)) },
+    (_, index) => filteredAchievements.slice(index * 5, index * 5 + 5),
+  )
+  const canToggle = achievementGroups.length > 1
 
   const selectCategory = (nextCategory) => {
     setCategory(nextCategory)
@@ -287,14 +419,17 @@ export default function AchievementsSection() {
         </div>
 
         {filteredAchievements.length ? (
-          <div className={`achievement-constellation-grid ${featured ? '' : 'without-featured'}`}>
-            {featured && <FeaturedAchievement achievement={featured} lang={lang} />}
-            <div className="achievement-bento" aria-live="polite">
-              {shownSecondary.map((achievement) => <AchievementCard achievement={achievement} key={achievement.id} />)}
-            </div>
-          </div>
+          <AchievementShowcaseRow group={achievementGroups[0]} groupIndex={0} lang={lang} />
         ) : (
           <div className="achievements-empty"><LineIcon type="star" /><p>No hay logros que coincidan con estos filtros.</p></div>
+        )}
+
+        {canToggle && expanded && (
+          <div className="achievement-extra-showcases" aria-live="polite">
+            {achievementGroups.slice(1).map((group, index) => (
+              <AchievementShowcaseRow group={group} groupIndex={index + 1} lang={lang} key={group[0].id} />
+            ))}
+          </div>
         )}
 
         {canToggle && (

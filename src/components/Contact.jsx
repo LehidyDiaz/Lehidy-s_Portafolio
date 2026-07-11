@@ -5,6 +5,8 @@ import SectionAtmosphere from './SectionAtmosphere'
 const contactChannels = [
   {
     label: 'WhatsApp',
+    action: 'Escríbeme',
+    tone: 'whatsapp',
     value: '+51 977 419 841',
     href: 'https://api.whatsapp.com/send/?phone=51977419841&text=Hola+Lehidy%2C+vi+tu+portafolio+y+me+gustar%C3%ADa+trabajar+contigo.&type=phone_number&app_absent=0',
     icon: (
@@ -15,6 +17,8 @@ const contactChannels = [
   },
   {
     label: 'GitHub',
+    action: 'Ver perfil',
+    tone: 'github',
     value: '@LehidyDiaz',
     href: 'https://github.com/LehidyDiaz',
     icon: (
@@ -23,6 +27,8 @@ const contactChannels = [
   },
   {
     label: 'LinkedIn',
+    action: 'Conectar',
+    tone: 'linkedin',
     value: '/in/lehidy-pamela-diaz-munayco-17257426b',
     href: 'https://www.linkedin.com/in/lehidy-pamela-diaz-munayco-17257426b/',
     icon: (
@@ -31,6 +37,8 @@ const contactChannels = [
   },
   {
     label: 'Email',
+    action: 'Enviar correo',
+    tone: 'email',
     value: 'diazmunaycopamela@gmail.com',
     href: 'mailto:diazmunaycopamela@gmail.com',
     icon: (
@@ -38,6 +46,17 @@ const contactChannels = [
     ),
   },
 ]
+
+function ContactIcon({ type }) {
+  const paths = {
+    user: <><circle cx="12" cy="8" r="3.5" /><path d="M5 20c.7-4 3-6 7-6s6.3 2 7 6" /></>,
+    email: <><rect x="3" y="5" width="18" height="14" rx="2" /><path d="m4 7 8 6 8-6" /></>,
+    message: <><path d="M4 5h16v12H9l-5 4V5Z" /><path d="M8 9h8M8 13h5" /></>,
+    send: <><path d="m3 11 18-8-7 18-3-7-8-3Z" /><path d="m11 14 4-5" /></>,
+  }
+
+  return <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">{paths[type]}</svg>
+}
 
 export default function Contact() {
   const [sent, setSent] = useState(false)
@@ -50,87 +69,56 @@ export default function Contact() {
   }
 
   return (
-    <section id="contact" className="py-20 px-4 bg-surface-light dark:bg-[#07101f] transition-colors relative overflow-hidden section-stars">
+    <section id="contact" className="contact-section section-stars">
       <SectionAtmosphere variant="contact" />
-      <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-600 via-gold to-blue-600" />
-      <div className="absolute inset-0 pointer-events-none">
-        <div className="hidden md:block absolute bottom-10 right-1/4 w-60 h-60 bg-blue-500/5 rounded-full blur-3xl" />
-        <div className="absolute top-20 left-[12%] text-lg float-slow opacity-20 dark:opacity-30 animate-float-slow">✦</div>
-      </div>
+      <div className="contact-container">
+        <header className="contact-header">
+          <h2><span className="contact-bracket">&lt;</span><span>{t('contactTitulo')}</span><span className="contact-code">/&gt;</span></h2>
+          <div className="contact-divider" aria-hidden="true"><span /><b>✦</b><span /></div>
+          <p>¿Tienes una idea, proyecto o propuesta? Escríbeme y conversemos.</p>
+        </header>
 
-      <div className="max-w-5xl mx-auto relative">
-        <h2 className="text-3xl md:text-4xl font-bold text-center text-gray-900 dark:text-white mb-12 font-cinzel tracking-wide">
-          <span className="text-blue-600">&lt;</span> {t('contactTitulo')} <span className="text-blue-600">/&gt;</span>
-        </h2>
-
-        <div className="grid md:grid-cols-5 gap-8 items-start">
-          <div className="md:col-span-3">
+        <div className="contact-layout">
+          <div className="contact-form-card">
             {sent ? (
-              <div className="flex items-center justify-center h-full min-h-[300px]">
-                <p className="text-center text-green-emerald text-lg font-medium">
-                  {t('contactExito')}
-                </p>
+              <div className="contact-success">
+                <ContactIcon type="send" />
+                <p>{t('contactExito')}</p>
               </div>
             ) : (
-              <form onSubmit={handleSubmit} className="premium-surface space-y-4 bg-white dark:bg-blue-night p-6 rounded-2xl border border-blue-200/60 dark:border-blue-400/20 shadow-sm">
-                <div>
-                  <label className="block text-sm font-medium text-gray-600 dark:text-blue-200/70 mb-1">{t('contactNombre')}</label>
-                  <input
-                    type="text"
-                    required
-                    className="w-full px-4 py-2.5 border border-blue-200/50 dark:border-blue-navy rounded-lg focus:ring-2 focus:ring-gold focus:border-gold outline-none transition bg-transparent text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-blue-200/30"
-                    placeholder={t('contactPlaceholderNombre')}
-                  />
+              <form onSubmit={handleSubmit} className="contact-form">
+                <div className="contact-field">
+                  <label htmlFor="contact-name">{t('contactNombre')}</label>
+                  <div><ContactIcon type="user" /><input id="contact-name" type="text" required placeholder={t('contactPlaceholderNombre')} /></div>
                 </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-600 dark:text-blue-200/70 mb-1">{t('contactEmail')}</label>
-                  <input
-                    type="email"
-                    required
-                    className="w-full px-4 py-2.5 border border-blue-200/50 dark:border-blue-navy rounded-lg focus:ring-2 focus:ring-gold focus:border-gold outline-none transition bg-transparent text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-blue-200/30"
-                    placeholder={t('contactPlaceholderEmail')}
-                  />
+                <div className="contact-field">
+                  <label htmlFor="contact-email">{t('contactEmail')}</label>
+                  <div><ContactIcon type="email" /><input id="contact-email" type="email" required placeholder={t('contactPlaceholderEmail')} /></div>
                 </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-600 dark:text-blue-200/70 mb-1">{t('contactMensaje')}</label>
-                  <textarea
-                    required
-                    rows={4}
-                    className="w-full px-4 py-2.5 border border-blue-200/50 dark:border-blue-navy rounded-lg focus:ring-2 focus:ring-gold focus:border-gold outline-none transition resize-none bg-transparent text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-blue-200/30"
-                    placeholder={t('contactPlaceholderMensaje')}
-                  />
+                <div className="contact-field">
+                  <label htmlFor="contact-message">{t('contactMensaje')}</label>
+                  <div className="contact-textarea"><ContactIcon type="message" /><textarea id="contact-message" required rows={5} placeholder={t('contactPlaceholderMensaje')} /></div>
                 </div>
-                <button
-                  type="submit"
-                  className="w-full py-3 bg-gold hover:bg-gold-light text-blue-deep rounded-lg transition-all duration-300 font-medium shadow-lg shadow-gold/20 font-cinzel tracking-wide text-sm hover:shadow-xl hover:-translate-y-0.5"
-                >
-                  {t('contactBtn')}
-                </button>
+                <button type="submit" className="contact-submit">{t('contactBtn')}<ContactIcon type="send" /></button>
               </form>
             )}
           </div>
 
-          <div className="md:col-span-2 grid grid-cols-2 gap-2">
-            {contactChannels.map((ch) => (
-              <a
-                key={ch.label}
-                href={ch.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex flex-col items-center justify-center gap-1.5 p-2.5 rounded-2xl border border-blue-200/50 dark:border-blue-navy/50 bg-blue-50/50 dark:bg-blue-navy/30 hover:bg-blue-100 dark:hover:bg-blue-navy/50 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md group aspect-square"
-              >
-                <div className="transition-transform duration-300 group-hover:scale-110">
-                  {ch.icon}
-                </div>
-                <span className="text-[10px] font-cinzel tracking-wide text-center leading-tight text-gray-600 dark:text-blue-200/70">{ch.label}</span>
-              </a>
-            ))}
+          <div className="contact-side">
+            <article className="contact-intro-card">
+              <div className="contact-intro-icon"><span /><ContactIcon type="email" /></div>
+              <div><h3>Hablemos</h3><p>Puedes contactarme directamente por cualquiera de estos medios.</p></div>
+            </article>
+            <div className="contact-channels">
+              {contactChannels.map((channel) => (
+                <a className={`contact-channel contact-channel-${channel.tone}`} key={channel.label} href={channel.href} target="_blank" rel="noopener noreferrer">
+                  <span className="contact-channel-icon">{channel.icon}</span>
+                  <span className="contact-channel-copy"><strong>{channel.label}</strong><small>{channel.action}<span aria-hidden="true">›</span></small></span>
+                </a>
+              ))}
+            </div>
           </div>
         </div>
-
-        <p className="text-center text-xs italic text-gold/50 mt-10 font-cinzel tracking-wide">
-          "Where they are just and loyal, those patient Hufflepuffs are true and unafraid of toil"
-        </p>
       </div>
     </section>
   )

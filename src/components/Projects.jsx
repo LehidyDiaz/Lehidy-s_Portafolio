@@ -9,7 +9,6 @@ const categories = [
   { key: 'powerbi', icon: '▤' },
   { key: 'websystems', icon: '◈' },
   { key: 'databases', icon: '◉' },
-  { key: 'webpages', icon: '◎' },
   { key: 'other', icon: '◇' },
 ]
 
@@ -26,18 +25,20 @@ const projects = [
     featured: true,
     features: ['Carrito de compras', 'Pasarela de pagos', 'Panel administrativo', 'Gestión de usuarios'],
   },
-  {
+    {
     id: 2,
-    title: 'Dashboard Analytics',
-    desc: { es: 'Panel de análisis con gráficos interactivos.', en: 'Analytics dashboard with interactive charts.' },
-    tags: ['Power BI', 'SQL', 'Excel'],
-    image: '/resource/img/dashb.png',
-    galleryImages: ['/resource/img/dashb.png', '/resource/img/dash2.jpeg'],
-    githubUrl: '#',
-    category: 'powerbi',
+    title: 'Proyecto final - Dashboard siniestros',
+    desc: { es: 'Dashboard de análisis y seguimiento de incidentes.', en: 'Dashboard for incident analysis and tracking.' },
+    tags: ['Power BI', 'Dashboard', 'Análisis de datos'],
+    image: '/resource/img/parcial.jpg',
+    galleryImages: ['/resource/img/parcial.jpg', '/resource/img/parcial1.jpg', '/resource/img/parcial2.jpg'],
+    downloadUrl: '/Parcialdash.pbix',
+    documentationUrl: '/documentacion.pdf',
+    category: 'university',
     featured: false,
-    features: ['Gráficos interactivos', 'Filtros dinámicos', 'Exportación de datos', 'Métricas en tiempo real'],
+    features: ['Seguimiento de incidentes', 'Indicadores visuales', 'Filtros dinámicos', 'Análisis de datos'],
   },
+  
   {
     id: 3,
     title: 'Database Design',
@@ -61,6 +62,42 @@ const projects = [
     category: 'university',
     featured: false,
     features: ['Registro de referencias', 'Búsqueda avanzada', 'Reportes PDF', 'Roles de usuario'],
+  },
+{
+    id: 5,
+    title: 'Financial System Dashboard',
+    desc: { es: 'Panel de análisis con gráficos interactivos.', en: 'Analytics dashboard with interactive charts.' },
+    tags: ['Power BI', 'SQL', 'Excel'],
+    image: '/resource/img/dashb.png',
+    galleryImages: ['/resource/img/dashb.png', '/resource/img/dash2.jpeg'],
+    githubUrl: '#',
+    category: 'powerbi',
+    featured: false,
+    features: ['Gráficos interactivos', 'Filtros dinámicos', 'Exportación de datos', 'Métricas en tiempo real'],
+  },
+  {
+    id: 6,
+    title: 'Web System for the Management of Services in a Hostel and Restaurant',
+    desc: { es: 'Sistema web para administrar los servicios de un hostal y restaurante.', en: 'Web system for managing hostel and restaurant services.' },
+    tags: ['Sistema web', 'Gestión', 'Servicios'],
+    image: '/resource/img/hostal1.png',
+    galleryImages: ['/resource/img/hostal1.png', '/resource/img/hostal.png'],
+    githubUrl: '#',
+    category: 'websystems',
+    featured: false,
+    features: ['Gestión de hospedaje', 'Servicios de restaurante', 'Control de reservas', 'Administración de clientes'],
+  },
+  {
+    id: 7,
+    title: 'Sales Dashboard',
+    desc: { es: 'Dashboard de ventas con indicadores clave.', en: 'Sales dashboard with key indicators.' },
+    tags: ['Power BI', 'Dashboard', 'Ventas'],
+    image: '/resource/img/ventas.png',
+    galleryImages: ['/resource/img/ventas.png'],
+    downloadUrl: '#',
+    category: 'powerbi',
+    featured: false,
+    features: ['Indicadores de ventas', 'Gráficos interactivos', 'Filtros dinámicos', 'Análisis de tendencias'],
   },
 ]
 
@@ -199,17 +236,17 @@ export default function Projects() {
               className={`project-carousel-viewport px-1 py-8 md:px-8 ${isMobile ? 'is-mobile' : ''}`}
             >
               <div
-                className="project-carousel-track flex items-center transition-transform duration-500 ease-out gap-4"
+                className="project-carousel-track flex items-center gap-8 transition-transform duration-500 ease-out"
                 style={isMobile
                   ? { '--project-mobile-offset': `${-currentIndex * (Math.min(viewportWidth * .9, 360) + 12)}px` }
-                  : { transform: `translateX(-${currentIndex * (100 / visibleCount)}%)` }}
+                  : { transform: `translateX(calc(-${currentIndex * (100 / visibleCount)}% - ${currentIndex * (32 / visibleCount)}px))` }}
               >
                 {displayItems.map((project, i) => (
                   <div
                     key={`${project.id}-${i}`}
                     data-slide-index={i}
                     className={`project-slide min-w-0 flex-shrink-0 ${i === highlightIndex ? 'project-slide-active' : ''}`}
-                    style={isMobile ? undefined : { flex: `0 0 calc(${100 / visibleCount}% - ${(visibleCount - 1) * 16 / visibleCount}px)` }}
+                    style={isMobile ? undefined : { flex: `0 0 calc(${100 / visibleCount}% - ${(visibleCount - 1) * 32 / visibleCount}px)` }}
                   >
                     <div
                       className={`project-card group relative bg-white/95 dark:bg-[#07101f]/95 rounded-2xl overflow-hidden border transition-all duration-500 hover:shadow-xl ${
@@ -257,12 +294,13 @@ export default function Projects() {
 
                         <div className="flex gap-2">
                           <a
-                            href={project.githubUrl && project.githubUrl !== '#' ? project.githubUrl : project.image}
-                            target="_blank"
-                            rel="noopener noreferrer"
+                            href={project.downloadUrl || (project.githubUrl && project.githubUrl !== '#' ? project.githubUrl : project.image)}
+                            target={project.downloadUrl ? undefined : '_blank'}
+                            rel={project.downloadUrl ? undefined : 'noopener noreferrer'}
+                            download={project.downloadUrl ? 'Parcialdash.pbix' : undefined}
                           className="flex-1 px-3 py-2.5 text-center text-xs font-medium border border-gold/55 text-gold rounded-lg hover:bg-gold/12 transition-all duration-300 shadow-[inset_0_1px_rgba(255,255,255,.05)]"
                           >
-                            {t('projectViewProject')}
+                            {project.downloadUrl ? 'Descargar proyecto' : t('projectViewProject')}
                           </a>
                           <button
                             onClick={() => openGallery(project)}

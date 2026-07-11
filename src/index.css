@@ -156,6 +156,8 @@ body {
 
 .project-carousel-viewport {
   overflow: hidden;
+  overflow: clip;
+  contain: paint;
 }
 
 .project-filter {
@@ -186,7 +188,7 @@ body {
 
 .project-slide {
   filter: saturate(.7) brightness(.72);
-  transform: perspective(1000px) rotateY(7deg) translateY(12px) scale(.91);
+  transform: perspective(1000px) rotateY(6deg) translateY(12px) scale(.93);
   transform-origin: right center;
   transition: transform .5s ease, opacity .5s ease, filter .5s ease;
 }
@@ -195,11 +197,11 @@ body {
   position: relative;
   z-index: 3;
   filter: saturate(1) brightness(1.06);
-  transform: perspective(1000px) rotateY(0) translateY(-20px) scale(1.055);
+  transform: perspective(1000px) rotateY(0) translateY(-20px) scale(1.015);
 }
 
 .project-slide-active + .project-slide {
-  transform: perspective(1000px) rotateY(-7deg) translateY(12px) scale(.91);
+  transform: perspective(1000px) rotateY(-6deg) translateY(12px) scale(.93);
   transform-origin: left center;
 }
 

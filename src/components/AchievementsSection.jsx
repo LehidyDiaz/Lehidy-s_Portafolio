@@ -2,70 +2,92 @@ import { useState } from 'react'
 import { useApp } from '../context/AppContext'
 import SectionAtmosphere from './SectionAtmosphere'
 
-const microsoftProfileUrl = 'https://learn.microsoft.com/en-us/users/lehidy/'
+const microsoftProfileUrl = 'https://learn.microsoft.com/es-es/users/diazmunaycolehidypamela-7971/achievements'
 
 const achievements = [
   {
     id: 1,
-    title: 'Azure Data Fundamentals',
+    title: 'Introducción al análisis de datos de Microsoft',
     description: {
-      es: 'Fundamentos de datos en Azure, cubriendo conceptos de bases de datos relacionales y no relacionales.',
-      en: 'Azure data fundamentals, covering relational and non-relational database concepts.',
+      es: 'Logro oficial de Microsoft Learn sobre los fundamentos del análisis de datos de Microsoft.',
+      en: 'Official Microsoft Learn achievement covering the fundamentals of Microsoft data analysis.',
     },
-    date: '2024',
-    year: 2024,
-    category: 'Azure',
-    type: 'Ruta completada',
+    date: null,
+    year: null,
+    category: 'Power BI',
+    type: 'Módulo completado',
     platform: 'Microsoft Learn',
-    url: microsoftProfileUrl,
+    url: 'https://learn.microsoft.com/api/achievements/share/es-es/DiazMunaycoLehidyPamela-7971/H224C6V8?sharingId=48B90D91B7E1A7',
     featured: true,
     visible: true,
-    image: 'https://learn.microsoft.com/training/achievements/explore-roles-responsibilities-world-of-data-social.png',
-    imageAlt: 'Exploración de roles y servicios de datos',
-    badge: 'azure',
+    image: 'https://learn.microsoft.com/training/achievements/overview-data-analysis-power-bi-social.png',
+    imageAlt: 'Introducción al análisis de datos de Microsoft',
+    badge: 'chart',
     tone: 'blue',
   },
   {
     id: 2,
-    title: 'Power BI Data Analyst',
-    date: '2024',
-    year: 2024,
-    category: 'Power BI',
-    type: 'Insignia',
+    title: 'Descripción de las ventajas de usar servicios en la nube',
+    date: null,
+    year: null,
+    category: 'Azure',
+    type: 'Módulo completado',
     platform: 'Microsoft Learn',
-    url: microsoftProfileUrl,
+    url: 'https://learn.microsoft.com/api/achievements/share/es-es/DiazMunaycoLehidyPamela-7971/ZJSGJ8W2?sharingId=48B90D91B7E1A7',
     featured: false,
     visible: true,
-    badge: 'chart',
-    tone: 'green',
+    image: 'https://learn.microsoft.com/training/achievements/describe-benefits-use-cloud-services-social.png',
+    imageAlt: 'Descripción de las ventajas de usar servicios en la nube',
+    badge: 'azure',
+    tone: 'blue',
   },
   {
     id: 3,
-    title: 'AI Fundamentals',
-    date: '2024',
-    year: 2024,
-    category: 'Inteligencia Artificial',
-    type: 'Ruta completada',
+    title: 'Descripción de la informática en la nube',
+    date: null,
+    year: null,
+    category: 'Azure',
+    type: 'Módulo completado',
     platform: 'Microsoft Learn',
-    url: microsoftProfileUrl,
+    url: 'https://learn.microsoft.com/api/achievements/share/es-es/DiazMunaycoLehidyPamela-7971/XPKJK6XY?sharingId=48B90D91B7E1A7',
     featured: false,
     visible: true,
-    badge: 'ai',
-    tone: 'green',
+    image: 'https://learn.microsoft.com/training/achievements/describe-cloud-compute-social.png',
+    imageAlt: 'Descripción de la informática en la nube',
+    badge: 'azure',
+    tone: 'blue',
   },
   {
     id: 4,
-    title: 'Web Development Path',
-    date: '2024',
-    year: 2024,
-    category: 'Desarrollo Web',
-    type: 'Ruta completada',
+    title: 'Descripción del análisis de datos',
+    date: null,
+    year: null,
+    category: 'Datos',
+    type: 'Módulo completado',
     platform: 'Microsoft Learn',
-    url: microsoftProfileUrl,
+    url: 'https://learn.microsoft.com/api/achievements/share/es-es/DiazMunaycoLehidyPamela-7971/WMVCSHRN?sharingId=48B90D91B7E1A7',
     featured: false,
     visible: true,
-    badge: 'web',
+    image: 'https://learn.microsoft.com/training/achievements/data-analytics-and-microsoft-social.png',
+    imageAlt: 'Descripción del análisis de datos',
+    badge: 'data',
     tone: 'gold',
+  },
+  {
+    id: 5,
+    title: 'Crear informes interactivos con Copilot para Power BI',
+    date: null,
+    year: null,
+    category: 'Power BI',
+    type: 'Módulo completado',
+    platform: 'Microsoft Learn',
+    url: 'https://learn.microsoft.com/api/achievements/share/es-es/DiazMunaycoLehidyPamela-7971/EGGH2ZCP?sharingId=48B90D91B7E1A7',
+    featured: false,
+    visible: true,
+    image: 'https://learn.microsoft.com/training/achievements/power-bi-module-social.png',
+    imageAlt: 'Crear informes interactivos con Copilot para Power BI',
+    badge: 'chart',
+    tone: 'green',
   },
 ]
 
@@ -127,7 +149,7 @@ function AchievementImage({ achievement, large = false }) {
 
 function AchievementStats({ items }) {
   const total = items.length
-  const badges = items.filter((item) => item.type === 'Insignia').length
+  const badges = items.filter((item) => Boolean(item.url)).length
   const paths = items.filter((item) => item.type === 'Ruta completada').length
   const verified = items.filter((item) => Boolean(item.url)).length
   const stats = [
@@ -169,7 +191,7 @@ function FeaturedAchievement({ achievement, lang }) {
           <p>{achievement.description?.[lang]}</p>
           <div className="featured-meta">
             <span><LineIcon type="verified" />{achievement.platform}</span>
-            <span><LineIcon type="calendar" />Obtenido en {achievement.date}</span>
+            {achievement.date && <span><LineIcon type="calendar" />Obtenido en {achievement.date}</span>}
             <span><LineIcon type="star" />{achievement.category}</span>
           </div>
           <a className="featured-credential" href={achievement.url} target="_blank" rel="noopener noreferrer">
@@ -190,7 +212,7 @@ function AchievementCard({ achievement }) {
       <span className="achievement-type">{achievement.type}</span>
       <h3>{achievement.title}</h3>
       <span className="achievement-category">{achievement.category}</span>
-      <time dateTime={String(achievement.year)}><LineIcon type="calendar" />{achievement.date}</time>
+      {achievement.date && <time dateTime={String(achievement.year)}><LineIcon type="calendar" />{achievement.date}</time>}
       <a href={achievement.url} target="_blank" rel="noopener noreferrer">Ver logro <span aria-hidden="true">↗</span></a>
     </article>
   )
@@ -203,7 +225,7 @@ export default function AchievementsSection() {
   const [expanded, setExpanded] = useState(false)
 
   const visibleAchievements = achievements.filter((achievement) => achievement.visible !== false)
-  const years = [...new Set(visibleAchievements.map((achievement) => achievement.year))].sort((a, b) => b - a)
+  const years = [...new Set(visibleAchievements.map((achievement) => achievement.year).filter(Number.isInteger))].sort((a, b) => b - a)
   const filteredAchievements = visibleAchievements.filter((achievement) => {
     const matchesCategory = category === 'Todos' || achievement.category === category
     const matchesYear = year === 'Todos' || achievement.year === Number(year)

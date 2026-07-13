@@ -25,7 +25,7 @@ const projects = [
     featured: true,
     features: ['Carrito de compras', 'Pasarela de pagos', 'Panel administrativo', 'Gestión de usuarios'],
   },
-    {
+  {
     id: 2,
     title: 'Proyecto final - Dashboard siniestros',
     desc: { es: 'Dashboard de análisis y seguimiento de incidentes.', en: 'Dashboard for incident analysis and tracking.' },
@@ -38,7 +38,25 @@ const projects = [
     featured: false,
     features: ['Seguimiento de incidentes', 'Indicadores visuales', 'Filtros dinámicos', 'Análisis de datos'],
   },
-  
+  {
+    id: 8,
+    title: 'Dashboard con Lovable',
+    desc: { es: 'Dashboard interactivo desarrollado en código con Lovable.', en: 'Interactive dashboard developed in code with Lovable.' },
+    tags: ['Lovable', 'Dashboard', 'Excel'],
+    image: '/resource/img/inicio.png',
+    galleryImages: ['/resource/img/inicio.png', '/resource/img/lov1.jpeg', '/resource/img/lov2.png', '/resource/img/lov3.png'],
+    projectUrl: 'https://lovable.dev/preview/wBXEkyRLgb7SNHBRleqCwRxHZMsMRyto',
+    fileUrl: '/lovable.xlsx',
+    fileName: 'lovable.xlsx',
+    fileLabel: { es: 'Ver archivo Excel', en: 'View Excel file' },
+    fileNote: {
+      es: 'Como el archivo inicial está hecho en código, no hay forma de descargarlo. Por eso, también se generó un archivo Excel con las mismas funciones.',
+      en: 'Since the original file was built in code, it cannot be downloaded. An Excel file with the same functions was also created.',
+    },
+    category: 'other',
+    featured: false,
+    features: ['Dashboard interactivo', 'Filtros dinámicos', 'Visualización de datos', 'Versión en Excel'],
+  },
   {
     id: 3,
     title: 'Database Design',
@@ -294,7 +312,7 @@ export default function Projects() {
 
                         <div className="flex gap-2">
                           <a
-                            href={project.downloadUrl || (project.githubUrl && project.githubUrl !== '#' ? project.githubUrl : project.image)}
+                            href={project.downloadUrl || project.projectUrl || (project.githubUrl && project.githubUrl !== '#' ? project.githubUrl : project.image)}
                             target={project.downloadUrl ? undefined : '_blank'}
                             rel={project.downloadUrl ? undefined : 'noopener noreferrer'}
                             download={project.downloadUrl ? 'Parcialdash.pbix' : undefined}

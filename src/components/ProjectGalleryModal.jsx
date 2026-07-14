@@ -116,10 +116,12 @@ export default function ProjectGalleryModal({ project, lang, onClose }) {
             <div className="mt-5 flex justify-center">
               <a
                 href={project.documentationUrl}
-                download="documentacion.pdf"
+                target={project.viewDocumentation ? '_blank' : undefined}
+                rel={project.viewDocumentation ? 'noopener noreferrer' : undefined}
+                download={project.viewDocumentation ? undefined : 'documentacion.pdf'}
                 className="rounded-lg border border-gold/60 bg-gold/10 px-5 py-2.5 text-sm font-medium text-gold transition hover:bg-gold hover:text-blue-deep"
               >
-                Descargar documentación
+                {project.viewDocumentation ? 'Ver documentación' : 'Descargar documentación'}
               </a>
             </div>
           )}

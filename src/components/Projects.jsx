@@ -14,16 +14,18 @@ const categories = [
 
 const projects = [
   {
-    id: 1,
-    title: 'Gym Web System',
-    desc: { es: 'Plataforma de compras con carrito, pagos y panel admin.', en: 'Shopping platform with cart, payments, and admin panel.' },
-    tags: ['React', 'Node.js', 'MySQL'],
-    image: '/resource/img/academico-ra.png',
-    galleryImages: ['/resource/img/academico-ra.png', '/resource/img/body.jpeg'],
-    githubUrl: 'https://github.com/LehidyDiaz/gimnasio---Body',
-    category: 'websystems',
-    featured: true,
-    features: ['Carrito de compras', 'Pasarela de pagos', 'Panel administrativo', 'Gestión de usuarios'],
+    id: 9,
+    title: 'Debian',
+    desc: { es: 'Proyecto desarrollado y documentado en Debian.', en: 'Project developed and documented in Debian.' },
+    tags: ['Debian', 'Linux', 'Documentación'],
+    image: '/resource/img/debian.jpeg',
+    galleryImages: ['/resource/img/debian.jpeg', '/resource/img/debian2.jpeg', '/resource/img/debian1.jpeg', '/resource/img/debian3.jpeg'],
+    projectUrl: 'https://drive.google.com/drive/folders/1boa3U9ohOFShDYZNtnGgrjcAun8O6YJU?usp=drive_link',
+    documentationUrl: '/debiandoc.pdf',
+    viewDocumentation: true,
+    category: 'other',
+    featured: false,
+    features: ['Configuración en Debian', 'Implementación del proyecto', 'Documentación técnica'],
   },
   {
     id: 2,
@@ -58,6 +60,18 @@ const projects = [
     features: ['Dashboard interactivo', 'Filtros dinámicos', 'Visualización de datos', 'Versión en Excel'],
   },
   {
+    id: 1,
+    title: 'Gym Web System',
+    desc: { es: 'Plataforma de compras con carrito, pagos y panel admin.', en: 'Shopping platform with cart, payments, and admin panel.' },
+    tags: ['React', 'Node.js', 'MySQL'],
+    image: '/resource/img/academico-ra.png',
+    galleryImages: ['/resource/img/academico-ra.png', '/resource/img/body.jpeg'],
+    githubUrl: 'https://github.com/LehidyDiaz/gimnasio---Body',
+    category: 'websystems',
+    featured: true,
+    features: ['Carrito de compras', 'Pasarela de pagos', 'Panel administrativo', 'Gestión de usuarios'],
+  },
+  {
     id: 3,
     title: 'Database Design',
     desc: { es: 'Diseño de base de datos para sistema de gestión.', en: 'Database design for management system.' },
@@ -80,8 +94,7 @@ const projects = [
     category: 'university',
     featured: false,
     features: ['Registro de referencias', 'Búsqueda avanzada', 'Reportes PDF', 'Roles de usuario'],
-  },
-{
+  },{
     id: 5,
     title: 'Financial System Dashboard',
     desc: { es: 'Panel de análisis con gráficos interactivos.', en: 'Analytics dashboard with interactive charts.' },
@@ -318,7 +331,7 @@ export default function Projects() {
                             download={project.downloadUrl ? 'Parcialdash.pbix' : undefined}
                           className="flex-1 px-3 py-2.5 text-center text-xs font-medium border border-gold/55 text-gold rounded-lg hover:bg-gold/12 transition-all duration-300 shadow-[inset_0_1px_rgba(255,255,255,.05)]"
                           >
-                            {project.downloadUrl ? 'Descargar proyecto' : t('projectViewProject')}
+                            {project.downloadUrl ? 'Descargar proyecto' : project.id === 9 ? 'Ver producto' : t('projectViewProject')}
                           </a>
                           <button
                             onClick={() => openGallery(project)}

@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
+import { flushSync } from 'react-dom'
 import { useApp } from '../context/AppContext'
 import ProjectGalleryModal from './ProjectGalleryModal'
 import SectionAtmosphere from './SectionAtmosphere'
@@ -135,6 +136,9 @@ const projects = [
 export default function Projects() {
   const [activeCategory, setActiveCategory] = useState('all')
   const [currentIndex, setCurrentIndex] = useState(0)
+  const [trackIndex, setTrackIndex] = useState(projects.length)
+  const [trackTransitionEnabled, setTrackTransitionEnabled] = useState(true)
+  const [isTransitioning, setIsTransitioning] = useState(false)
   const [galleryOpen, setGalleryOpen] = useState(false)
   const [galleryProject, setGalleryProject] = useState(null)
   const [slidesPerView, setSlidesPerView] = useState(3)
@@ -142,6 +146,7 @@ export default function Projects() {
   const { t, lang } = useApp()
   const carouselRef = useRef(null)
   const touchStartRef = useRef(null)
+  const isTransitioningRef = useRef(false)
 
   useEffect(() => {
     const updateSlidesPerView = () => {
@@ -162,9 +167,8 @@ export default function Projects() {
   const isMobile = slidesPerView === 1
   const visibleCount = Math.min(filtered.length, slidesPerView)
 
-  const displayItems = isMobile ? filtered : [...filtered, ...filtered.slice(0, visibleCount)]
-  const maxIndex = filtered.length - 1
-  const highlightIndex = visibleCount >= 3 ? currentIndex + 1 : currentIndex
+  const displayItems = filtered.length > 1 ? [...filtered, ...filtered, ...filtered] : filtered
+  const highlightIndex = trackIndex + (visibleCount >= 3 ? 1 : 0)
 
   const handleTouchStart = (event) => {
     if (!isMobile) return
@@ -185,16 +189,70 @@ export default function Projects() {
   }
 
   const selectCategory = (key) => {
+    const nextProjects = key === 'all' ? projects : projects.filter((project) => project.category === key)
+    isTransitioningRef.current = false
+    setTrackTransitionEnabled(false)
+    setIsTransitioning(false)
     setActiveCategory(key)
     setCurrentIndex(0)
+    setTrackIndex(nextProjects.length > 1 ? nextProjects.length : 0)
+    requestAnimationFrame(() => requestAnimationFrame(() => setTrackTransitionEnabled(true)))
   }
 
   const prevSlide = () => {
-    setCurrentIndex((prev) => (prev === 0 ? maxIndex : prev - 1))
+    if (isTransitioningRef.current || filtered.length <= 1) return
+    isTransitioningRef.current = true
+    setIsTransitioning(true)
+    setCurrentIndex((prev) => (prev === 0 ? filtered.length - 1 : prev - 1))
+    setTrackIndex((prev) => prev - 1)
   }
 
   const nextSlide = () => {
-    setCurrentIndex((prev) => (prev >= maxIndex ? 0 : prev + 1))
+    if (isTransitioningRef.current || filtered.length <= 1) return
+    isTransitioningRef.current = true
+    setIsTransitioning(true)
+    setCurrentIndex((prev) => (prev >= filtered.length - 1 ? 0 : prev + 1))
+    setTrackIndex((prev) => prev + 1)
+  }
+
+  const goToSlide = (targetIndex) => {
+    if (isTransitioningRef.current || targetIndex === currentIndex) return
+
+    let distance = targetIndex - currentIndex
+    if (Math.abs(distance) > filtered.length / 2) {
+      distance += distance > 0 ? -filtered.length : filtered.length
+    }
+
+    isTransitioningRef.current = true
+    setIsTransitioning(true)
+    setCurrentIndex(targetIndex)
+    setTrackIndex((prev) => prev + distance)
+  }
+
+  const handleTrackTransitionEnd = (event) => {
+    if (event.target !== event.currentTarget || event.propertyName !== 'transform' || filtered.length <= 1) return
+
+    let normalizedIndex = trackIndex
+    if (trackIndex < filtered.length) normalizedIndex += filtered.length
+    if (trackIndex >= filtered.length * 2) normalizedIndex -= filtered.length
+    if (normalizedIndex === trackIndex) {
+      isTransitioningRef.current = false
+      setIsTransitioning(false)
+      return
+    }
+
+    flushSync(() => {
+      setTrackTransitionEnabled(false)
+      setTrackIndex(normalizedIndex)
+    })
+
+    // Commit the identical cloned position before transitions are enabled again.
+    void event.currentTarget.offsetWidth
+    requestAnimationFrame(() => {
+      setTrackTransitionEnabled(true)
+      setIsTransitioning(false)
+      isTransitioningRef.current = false
+    })
   }
 
   const openGallery = (project) => {
@@ -268,9 +326,16 @@ export default function Projects() {
             >
               <div
                 className="project-carousel-track flex items-center gap-8 transition-transform duration-500 ease-out"
+                onTransitionEnd={handleTrackTransitionEnd}
                 style={isMobile
-                  ? { '--project-mobile-offset': `${-currentIndex * (Math.min(viewportWidth * .9, 360) + 12)}px` }
-                  : { transform: `translateX(calc(-${currentIndex * (100 / visibleCount)}% - ${currentIndex * (32 / visibleCount)}px))` }}
+                  ? {
+                      '--project-mobile-offset': `${-trackIndex * (Math.min(viewportWidth * .9, 360) + 12)}px`,
+                      ...(trackTransitionEnabled ? {} : { transition: 'none' }),
+                    }
+                  : {
+                      transform: `translateX(calc(-${trackIndex * (100 / visibleCount)}% - ${trackIndex * (32 / visibleCount)}px))`,
+                      ...(trackTransitionEnabled ? {} : { transition: 'none' }),
+                    }}
               >
                 {displayItems.map((project, i) => (
                   <div
@@ -351,6 +416,7 @@ export default function Projects() {
               <>
                 <button
                   onClick={prevSlide}
+                  disabled={isTransitioning}
                   className="project-arrow project-arrow-prev absolute left-0 top-1/2 -translate-y-1/2 -translate-x-3 md:-translate-x-5 w-10 h-10 flex items-center justify-center rounded-full bg-white dark:bg-blue-night border border-blue-200 dark:border-blue-navy text-blue-600 dark:text-gold hover:bg-blue-50 dark:hover:bg-blue-navy/70 transition-all shadow-md hover:shadow-lg z-10"
                   aria-label="Previous"
                 >
@@ -360,6 +426,7 @@ export default function Projects() {
                 </button>
                 <button
                   onClick={nextSlide}
+                  disabled={isTransitioning}
                   className="project-arrow project-arrow-next absolute right-0 top-1/2 -translate-y-1/2 translate-x-3 md:translate-x-5 w-10 h-10 flex items-center justify-center rounded-full bg-white dark:bg-blue-night border border-blue-200 dark:border-blue-navy text-blue-600 dark:text-gold hover:bg-blue-50 dark:hover:bg-blue-navy/70 transition-all shadow-md hover:shadow-lg z-10"
                   aria-label="Next"
                 >
@@ -376,7 +443,7 @@ export default function Projects() {
           {filtered.map((_, i) => (
             <button
               key={i}
-              onClick={() => setCurrentIndex(i)}
+              onClick={() => goToSlide(i)}
               className={`w-2.5 h-2.5 rounded-full transition-all duration-300 ${
                 i === currentIndex
                   ? 'bg-gold w-6 shadow-sm shadow-gold/50'
